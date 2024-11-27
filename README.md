@@ -77,7 +77,7 @@ eligible for the Reindeer Deno and the Logo sticker.
 Be sure to follow these steps in order to get your stickers!
 
 - Share your solutions publicly on [GitHub](https://github.com) with the topic
-  `aoc-2024-with-deno`
+  `aoc-2024-in-deno`
 - Have your contact details (email address) on your GitHub profile
 - Share your GitHub repo of solutions on social media
   - _Not on social media?
