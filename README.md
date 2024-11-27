@@ -24,6 +24,7 @@ and exclusive Deno prizes! 👇️
 
 - [Prizes](#prizes)
 - [How to submit](#how-to-submit)
+- [Ways to use Deno](#ways-to-use-deno-in-your-submissions)
 - [Community and resources](#community-and-resources)
 - [Let's code](#lets-code)
 
