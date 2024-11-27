@@ -80,9 +80,9 @@ Be sure to follow these steps in order to get your stickers!
   `aoc-2024-with-deno`
 - Have your contact details (email address) on your GitHub profile
 - Share your GitHub repo of solutions on social media
-  - _Not on social media? Create an issue on the
-    [`denoland/advent-of-code-2024`](https://github.com/denoland/advent-of-code-2024)
-    repo_
+  - _Not on social media?
+    [Create an issue](https://github.com/denoland/advent-of-code-2024/issues) on
+    this repo_
 - Follow [the Advent of Code guidelines](https://adventofcode.com/2024/about)
   (i.e. no using AI or LLMs!)
 
