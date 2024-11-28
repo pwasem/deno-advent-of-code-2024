@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "denoland.vscode-deno",
+    "editorconfig.editorconfig",
+    "dotenv.dotenv-vscode",
+    "yoavbls.pretty-ts-errors"
+  ],
+  "unwantedRecommendations": [
+    "GitHub.copilot",
+    "GitHub.copilot-chat"
+  ]
+}
