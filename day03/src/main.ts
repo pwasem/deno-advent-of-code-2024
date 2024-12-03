@@ -5,8 +5,8 @@ export interface Args {
   path: string
 }
 
-export const MUL_REG_EXP_GLOBAL = /mul\((\d*),(\d*)\)/g
 export const MUL_REG_EXP = /mul\((\d*),(\d*)\)/
+export const MUL_REG_EXP_GLOBAL = new RegExp(MUL_REG_EXP.source, 'g')
 export const DO_REG_EXP = /do\(\)/
 export const DONT_REG_EXP = /don't\(\)/
 
