@@ -21,26 +21,34 @@ export async function part1(path: string) {
 
 export async function part2(path: string) {
   const memory = await Deno.readTextFile(path)
-  // REVISE: implement proper lexer ;)
+
   let word = ''
   let enabled = true
   let result = 0
+
+  // REVISE: implement proper lexer ;)
   for (const char of memory) {
     word += char
     if (DO_REG_EXP.test(word)) {
       enabled = true
       word = ''
-    } else if (DONT_REG_EXP.test(word)) {
+      continue
+    }
+
+    if (DONT_REG_EXP.test(word)) {
       enabled = false
       word = ''
-    } else if (MUL_REG_EXP.test(word)) {
-      if (enabled) {
-        const [, a, b] = [...word.match(MUL_REG_EXP)!]
-        result += parseInt(a) * parseInt(b)
-        word = ''
-      }
+      continue
+    }
+
+    if (MUL_REG_EXP.test(word) && enabled) {
+      const [, a, b] = [...word.match(MUL_REG_EXP)!]
+      result += parseInt(a) * parseInt(b)
+      word = ''
+      continue
     }
   }
+
   return result
 }
 
