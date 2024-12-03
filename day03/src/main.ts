@@ -29,14 +29,9 @@ export async function part2(path: string) {
   // REVISE: implement proper lexer ;)
   for (const char of memory) {
     word += char
+
     if (DO_REG_EXP.test(word)) {
       enabled = true
-      word = ''
-      continue
-    }
-
-    if (DONT_REG_EXP.test(word)) {
-      enabled = false
       word = ''
       continue
     }
@@ -44,6 +39,12 @@ export async function part2(path: string) {
     if (MUL_REG_EXP.test(word) && enabled) {
       const [, a, b] = [...word.match(MUL_REG_EXP)!]
       result += parseInt(a) * parseInt(b)
+      word = ''
+      continue
+    }
+
+    if (DONT_REG_EXP.test(word)) {
+      enabled = false
       word = ''
       continue
     }
