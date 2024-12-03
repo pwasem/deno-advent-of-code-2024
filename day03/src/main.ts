@@ -36,7 +36,7 @@ export async function part2(path: string) {
       continue
     }
 
-    if (MUL_REG_EXP.test(word) && enabled) {
+    if (enabled && MUL_REG_EXP.test(word)) {
       const [, a, b] = [...word.match(MUL_REG_EXP)!]
       result += parseInt(a) * parseInt(b)
       word = ''
