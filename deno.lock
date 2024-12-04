@@ -46,6 +46,11 @@
           "jsr:@std/cli@^1.0.7",
           "jsr:@std/path@^1.0.8"
         ]
+      },
+      "day04": {
+        "dependencies": [
+          "jsr:@std/cli@^1.0.7"
+        ]
       }
     }
   }
