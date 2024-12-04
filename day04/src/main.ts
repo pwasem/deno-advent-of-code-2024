@@ -1,9 +1,9 @@
 import { parseArgs } from '@std/cli'
 
-export interface Args {
+interface Args {
   path: string
 }
-export async function readData(path: string) {
+async function readData(path: string) {
   const file = await Deno.readTextFile(path)
 
   const lines = file.trim().split('\n')
@@ -17,20 +17,20 @@ export async function readData(path: string) {
   return data
 }
 
-export function matchXmas(word: string) {
+function matchXmas(word: string) {
   const matched = [...word.matchAll(/XMAS/g)]
   const count = matched.length
   return count
 }
 
-export function searchXmasHorizontal(data: string[][]) {
+function searchXmasHorizontal(data: string[][]) {
   const count = data.reduce((acc, row) => {
     return acc + matchXmas(row.join('')) + matchXmas(row.reverse().join(''))
   }, 0)
   return count
 }
 
-export function searchXmasVertical(data: string[][]) {
+function searchXmasVertical(data: string[][]) {
   const columns: string[][] = []
   for (let i = 0; i < data.length; i++) {
     const column = data.map((row) => row[i])
@@ -40,7 +40,7 @@ export function searchXmasVertical(data: string[][]) {
   return count
 }
 
-export function searchXmasDiagonal(data: string[][]) {
+function searchXmasDiagonal(data: string[][]) {
   const n = data.length
 
   // Arrays to hold diagonals
@@ -75,7 +75,7 @@ export function searchXmasDiagonal(data: string[][]) {
   return count
 }
 
-export function searchXmas(data: string[][]) {
+function searchXmas(data: string[][]) {
   let count = 0
   count += searchXmasHorizontal(data)
   count += searchXmasVertical(data)
@@ -83,12 +83,42 @@ export function searchXmas(data: string[][]) {
   return count
 }
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
+function getMas(data: string[][], row: number, col: number) {
+  let block = ''
+
+  for (let r = row; r < row + 3; r++) {
+    for (let c = col; c < col + 3; c++) {
+      block += data[r]?.[c] ?? ''
+    }
+  }
+
+  return block
+}
+
+function matchMas(word: string) {
+  const matched = word.match(/M.S.A.M.S|S.M.A.S.M|M.M.A.S.S|S.S.A.M.M/)
+  const count = matched !== null ? 1 : 0
+  return count
+}
+
+function searchMas(data: string[][]) {
+  let count = 0
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data.length + 3; j++) {
+      const block = getMas(data, i, j)
+      count += matchMas(block)
+    }
+  }
+  return count
+}
+
 if (import.meta.main) {
   const {
     path,
   } = parseArgs(Deno.args) as Args
   const data = await readData(path)
-  const count = searchXmas(data)
-  console.log('Count', count)
+  const xMasCount = searchXmas(data)
+  console.log('XMAS Count', xMasCount)
+  const masCount = searchMas(data)
+  console.log('X-MAS Count', masCount)
 }
