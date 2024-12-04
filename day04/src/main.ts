@@ -3,6 +3,7 @@ import { parseArgs } from '@std/cli'
 interface Args {
   path: string
 }
+
 async function readData(path: string) {
   const file = await Deno.readTextFile(path)
 
@@ -84,15 +85,15 @@ function searchXmas(data: string[][]) {
 }
 
 function getMas(data: string[][], row: number, col: number) {
-  let block = ''
+  let word = ''
 
   for (let r = row; r < row + 3; r++) {
     for (let c = col; c < col + 3; c++) {
-      block += data[r]?.[c] ?? ''
+      word += data[r]?.[c] ?? '' // REVISE: out of bounds
     }
   }
 
-  return block
+  return word
 }
 
 function matchMas(word: string) {
@@ -105,8 +106,8 @@ function searchMas(data: string[][]) {
   let count = 0
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data.length + 3; j++) {
-      const block = getMas(data, i, j)
-      count += matchMas(block)
+      const word = getMas(data, i, j)
+      count += matchMas(word)
     }
   }
   return count
@@ -116,9 +117,12 @@ if (import.meta.main) {
   const {
     path,
   } = parseArgs(Deno.args) as Args
+
   const data = await readData(path)
+
   const xMasCount = searchXmas(data)
   console.log('XMAS Count', xMasCount)
+
   const masCount = searchMas(data)
   console.log('X-MAS Count', masCount)
 }
