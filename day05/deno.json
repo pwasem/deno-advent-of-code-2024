@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --v8-flags=\"--max-old-space-size=24576\" --allow-read=./ src/main.ts",
+    "start": "deno run --allow-read=./ src/main.ts",
     "test": "deno test --allow-read=./"
   },
   "imports": {
