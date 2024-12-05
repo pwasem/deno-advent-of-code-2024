@@ -39,6 +39,22 @@ export function parseUpdates(updatesData: string): Update[] {
   return updates
 }
 
+export function checkUpdate(
+  rules: Rule[],
+  update: Update,
+): boolean {
+  const correct = update.every((page, index) => {
+    // REVISE: what if there are no page rules
+    const pageRules = rules.filter(([before]) => page === before)
+    const nextPages = update.slice(index + 1)
+    return nextPages.every((nextPage) => {
+      return pageRules.some(([, next]) => next === nextPage)
+    })
+  })
+
+  return correct
+}
+
 export function checkUpdates(
   rules: Rule[],
   updates: Update[],
@@ -79,6 +95,7 @@ export function computeMiddleSum(updates: Update[]): number {
 
 // part 2
 
+// REVISE: sth. still wrong here
 export function orderUpdate(rules: Rule[], update: Update) {
   for (const page of update) {
     const pageRules = rules.filter(([before]) => page === before)
