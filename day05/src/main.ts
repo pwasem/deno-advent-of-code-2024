@@ -1,13 +1,15 @@
 import { parseArgs } from '@std/cli'
 
-type Rules = number[][]
-type Updates = number[][]
+export type Rule = number[]
+export type Update = number[]
 
-interface Args {
+export interface Args {
   path: string
 }
 
-async function readData(path: string): Promise<[string, string]> {
+// part 1
+
+export async function readData(path: string): Promise<[string, string]> {
   const data = await Deno.readTextFile(path)
 
   const [
@@ -21,28 +23,31 @@ async function readData(path: string): Promise<[string, string]> {
   ]
 }
 
-function parseRules(rulesData: string): Rules {
+export function parseRules(rulesData: string): Rule[] {
   const rules = rulesData.trim().split('\n').reduce((acc, rule) => {
     const [before, after] = rule.split('|').map((r) => parseInt(r))
     acc.push([before, after])
     return acc
-  }, [] as Rules)
+  }, [] as Rule[])
   return rules
 }
 
-function parseUpdates(updatesData: string): Updates {
+export function parseUpdates(updatesData: string): Update[] {
   const updates = updatesData.trim().split('\n').map((update) => {
     return update.split(',').map((u) => parseInt(u))
   })
   return updates
 }
 
-function filterUpdates(
-  rules: Rules,
-  updates: Updates,
-) {
-  return updates.filter((update) => {
-    return update.every((page, index) => {
+export function checkUpdates(
+  rules: Rule[],
+  updates: Update[],
+): [Update[], Update[]] {
+  const correctUpdates: Update[] = []
+  const incorrectUpdates: Update[] = []
+
+  for (const update of updates) {
+    const correct = update.every((page, index) => {
       // REVISE: what if there are no page rules
       const pageRules = rules.filter(([before]) => page === before)
       const nextPages = update.slice(index + 1)
@@ -50,16 +55,67 @@ function filterUpdates(
         return pageRules.some(([, next]) => next === nextPage)
       })
     })
-  })
+
+    if (correct) {
+      correctUpdates.push(update)
+    } else {
+      incorrectUpdates.push(update)
+    }
+  }
+
+  return [
+    correctUpdates,
+    incorrectUpdates,
+  ]
 }
 
-function computeMiddleSume(updates: Updates) {
+export function computeMiddleSum(updates: Update[]): number {
   const sum = updates.reduce((acc, update) => {
     const middleIndex = Math.floor(update.length / 2)
     return acc + update[middleIndex]
   }, 0)
   return sum
 }
+
+// part 2
+
+export function orderUpdate(rules: Rule[], update: Update) {
+  for (const page of update) {
+    const pageRules = rules.filter(([before]) => page === before)
+
+    if (pageRules.length === 0) {
+      continue
+    }
+
+    // remove element from old index
+    const oldIndex = update.indexOf(page)
+    update.splice(oldIndex, 1)
+
+    // get new 'lowest' insert index
+    const newIndex = pageRules.reduce((index, [, after]) => {
+      const nextIndex = update.indexOf(after)
+      return Math.min(index, nextIndex)
+    }, update.length)
+
+    // insert element at new index
+    update.splice(newIndex, 0, page)
+  }
+
+  return update
+}
+
+export function orderUpdates(rules: Rule[], updates: Update[]): Update[] {
+  return updates.map((update) =>
+    orderUpdate(
+      rules.filter(([before, after]) =>
+        update.includes(before) && update.includes(after)
+      ),
+      update,
+    )
+  )
+}
+
+// main
 
 if (import.meta.main) {
   const {
@@ -78,9 +134,17 @@ if (import.meta.main) {
     parseUpdates(updatesData),
   ]
 
-  const correctUpdates = filterUpdates(rules, updates)
+  const [
+    correctUpdates,
+    incorrectUpdates,
+  ] = checkUpdates(rules, updates)
 
-  const middleSum = computeMiddleSume(correctUpdates)
+  // part 1
+  const correctMiddleSum = computeMiddleSum(correctUpdates)
+  console.log('Correct Updates - Middle Sum', correctMiddleSum)
 
-  console.log('Middle Sum', middleSum)
+  // part 2
+  const correctedUpdates = orderUpdates(rules, incorrectUpdates)
+  const correctedMiddleSum = computeMiddleSum(correctedUpdates)
+  console.log('Corrected Updates - Middle Sum', correctedMiddleSum)
 }
