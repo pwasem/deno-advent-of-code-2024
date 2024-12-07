@@ -63,6 +63,12 @@
           "jsr:@std/assert@^1.0.8",
           "jsr:@std/cli@^1.0.7"
         ]
+      },
+      "day07": {
+        "dependencies": [
+          "jsr:@std/assert@^1.0.8",
+          "jsr:@std/cli@^1.0.7"
+        ]
       }
     }
   }
