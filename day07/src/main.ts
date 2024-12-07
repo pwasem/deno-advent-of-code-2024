@@ -14,6 +14,7 @@ function compute(operands: number[]): number[] {
   return [
     compute([a + b, ...rest]),
     compute([a * b, ...rest]),
+    compute([parseInt(`${a}${b}`), ...rest]),
   ].flat()
 }
 
