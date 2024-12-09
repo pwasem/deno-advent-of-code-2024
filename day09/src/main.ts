@@ -5,13 +5,12 @@ interface Args {
 }
 
 type Block = number | null
-// type Blocks = Block[]
 
-async function readBlocks(path: string) {
+async function readDiskMap(path: string) {
   const diskMap = (await Deno.readTextFile(path)).trim()
 
   let id = 0
-  let blocks: Block[] = []
+  const blocksList: Block[][] = []
 
   for (let index = 0; index < diskMap.length; index++) {
     const size = parseInt(diskMap[index])
@@ -25,33 +24,34 @@ async function readBlocks(path: string) {
       block.fill(null)
     }
 
-    blocks = [
-      ...blocks,
-      ...block,
-    ]
+    blocksList.push(block)
   }
 
-  return blocks
+  return blocksList
 }
 
-function moveBlocks(blocks: Block[]) {
-  for (let index = 0; index < blocks.length; index++) {
-    const block = blocks[index]
+function moveBlocksRightToLeft(blocksList: Block[][]) {
+  const movedBlocks = blocksList.flat()
+
+  for (let index = 0; index < movedBlocks.length; index++) {
+    const block = movedBlocks[index]
 
     if (block !== null) {
       continue
     }
 
-    const lastFileIndex = blocks.findLastIndex((block) => block !== null)
+    const lastFileIndex = movedBlocks.findLastIndex((block) => block !== null)
 
     if (lastFileIndex < index) {
       break
     }
 
-    const file = blocks[lastFileIndex] as number
-    blocks[index] = file
-    blocks[lastFileIndex] = block
+    const file = movedBlocks[lastFileIndex] as number
+    movedBlocks[index] = file
+    movedBlocks[lastFileIndex] = block
   }
+
+  return movedBlocks
 }
 
 function computeChecksum(blocks: Block[]) {
@@ -68,10 +68,8 @@ if (import.meta.main) {
     path,
   } = parseArgs(Deno.args) as Args
 
-  const blocks = await readBlocks(path)
-  moveBlocks(blocks)
-
+  const blocksList = await readDiskMap(path)
+  const blocks = moveBlocksRightToLeft(blocksList)
   const checksum = computeChecksum(blocks)
-
   console.log({ checksum })
 }
