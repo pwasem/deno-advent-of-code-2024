@@ -54,6 +54,41 @@ function moveBlocksRightToLeft(blocksList: Block[][]) {
   return movedBlocks
 }
 
+// function moveBlocksLeftToRight(blocksList: Block[][]) {
+//   for (let blocksIndex = 0; blocksIndex < blocksList.length; blocksIndex++) {
+//     const blocks = blocksList[blocksIndex]
+
+//     console.log({
+//       blocks,
+//     })
+
+//     if (blocks[0] !== null) {
+//       continue
+//     }
+
+//     const lastFileBlocksIndex = blocksList.findLastIndex((fbs) =>
+//       fbs[0] !== null && fbs.length <= blocks.length
+//     )
+
+//     if (lastFileBlocksIndex < 0) {
+//       continue
+//     }
+
+//     const lastFileBlock = blocksList[lastFileBlocksIndex]
+
+//     for (
+//       let fileBlockIndex = 0;
+//       fileBlockIndex < lastFileBlock.length;
+//       fileBlockIndex++
+//     ) {
+//       blocks[fileBlockIndex] = lastFileBlock[fileBlockIndex]
+//       lastFileBlock[fileBlockIndex] = null
+//     }
+//   }
+
+//   return blocksList.flat()
+// }
+
 function computeChecksum(blocks: Block[]) {
   return blocks.reduce((acc, block, index) => {
     if (block === null) {
@@ -70,6 +105,11 @@ if (import.meta.main) {
 
   const blocksList = await readDiskMap(path)
   const blocks = moveBlocksRightToLeft(blocksList)
+  // const blocks = moveBlocksLeftToRight(blocksList)
+  console.log({
+    blocks: blocks.map((b) => b === null ? '.' : b).join(''),
+    // blocks,
+  })
   const checksum = computeChecksum(blocks)
   console.log({ checksum })
 }
