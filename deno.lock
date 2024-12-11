@@ -78,6 +78,11 @@
         "dependencies": [
           "jsr:@std/cli@^1.0.8"
         ]
+      },
+      "day10": {
+        "dependencies": [
+          "jsr:@std/cli@^1.0.8"
+        ]
       }
     }
   }
