@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "start": "deno run --allow-read=./ src/main.ts",
+    "test": "deno test --allow-read=./"
+  },
+  "imports": {
+    "@/": "./src/",
+    "@std/cli": "jsr:@std/cli@^1.0.8"
+  }
+}
