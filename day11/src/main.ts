@@ -18,25 +18,24 @@ async function readInitialArrangement(path: string) {
 }
 
 function blink(arrangement: Arrangement) {
-  const rearrangement: Arrangement = []
+  const rearranged: Arrangement = []
 
   for (const stone of arrangement) {
-    if (stone === 0) {
-      rearrangement.push(1)
-    } else if (stone.toString().length % 2 === 0) {
-      const str = stone.toString()
+    const str = stone.toString()
 
+    if (stone === 0) {
+      rearranged.push(1)
+    } else if (str.length % 2 === 0) {
       const middle = Math.floor(str.length / 2)
       const left = str.substring(0, middle)
       const right = str.substring(middle)
-
-      rearrangement.push(parseInt(left), parseInt(right))
+      rearranged.push(parseInt(left), parseInt(right))
     } else {
-      rearrangement.push(stone * 2024)
+      rearranged.push(stone * 2024)
     }
   }
 
-  return rearrangement
+  return rearranged
 }
 
 if (import.meta.main) {
