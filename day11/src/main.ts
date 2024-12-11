@@ -26,10 +26,10 @@ function blink(arrangement: Arrangement) {
     if (stone === 0) {
       rearranged.push(1)
     } else if (str.length % 2 === 0) {
-      const middle = Math.floor(str.length / 2)
-      const left = str.substring(0, middle)
-      const right = str.substring(middle)
-      rearranged.push(parseInt(left), parseInt(right))
+      const middleLength = Math.floor(str.length / 2)
+      const leftStr = str.substring(0, middleLength)
+      const rightStr = str.substring(middleLength)
+      rearranged.push(parseInt(leftStr), parseInt(rightStr))
     } else {
       rearranged.push(stone * 2024)
     }
